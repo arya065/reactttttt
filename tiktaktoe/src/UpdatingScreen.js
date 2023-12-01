@@ -7,6 +7,7 @@ function go() {
   return (
     <div>
       <Mabutton />
+      <Mabutton />
     </div>
   );
 }
