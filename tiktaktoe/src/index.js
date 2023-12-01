@@ -5,12 +5,13 @@ import App from "./App";
 import Arrays from "./Arrays";
 import Events from "./Events";
 import UpdatingScreen from "./UpdatingScreen";
+import SharingData from "./SharingData";
 import reportWebVitals from "./reportWebVitals";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
-    <UpdatingScreen />
+    <SharingData />
   </React.StrictMode>
 );
 
