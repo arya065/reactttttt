@@ -7,11 +7,12 @@ import Events from "./Events";
 import UpdatingScreen from "./UpdatingScreen";
 import SharingData from "./SharingData";
 import reportWebVitals from "./reportWebVitals";
+import Tiktaktoe from "./Tiktaktoe";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
-    <SharingData />
+    <Tiktaktoe />
   </React.StrictMode>
 );
 
