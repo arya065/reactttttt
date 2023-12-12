@@ -1,4 +1,7 @@
-function App(){
-    return(<>test</>);
+import './App.css';
+import React from 'react';
+
+class TikTakToe extends React.Component {
 }
-export default App;
+
+export default TikTakToe;
