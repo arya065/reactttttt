@@ -7,8 +7,10 @@ class Form extends React.Component {
     render() {
         return (
             <div>
-                <form onSubmit={this.props.onAddDeseo}>
+                <form onSubmit={this.props.change}>
                     <input type='text' name='nombre' placeholder='Introduce regalo' />
+                    {/* <input type='text' name='other' placeholder='Introduce regalo' /> */}
+                    {/* <input type='submit' /> */}
                 </form>
             </div>
         )

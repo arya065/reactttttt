@@ -6,7 +6,9 @@ class History extends React.Component {
     }
     render() {
         return (
-            <div></div>
+            <div>
+                {/* {console.log(this.props)} */}
+            </div>
         )
     }
 }
