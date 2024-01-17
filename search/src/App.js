@@ -11,6 +11,7 @@ class App extends Component {
     }
     this.handleSubmit = this.handleSubmit.bind(this);//когда надо ставить а когда нет
   }
+
   defaultList() {
     let arr = [];
     arr.push("Estepona", "Estepa", "Esqqqqq", "Eswwwww", "esqqqqq", "seee", "Sewqqqq");

@@ -16,6 +16,9 @@ button {
 */
 const MapaBotones = (props) => {
   // este componente pinta el tablero 9x9 con las props que le paso.
+  return(){
+
+  }
 }
 
 class App extends Component {
@@ -69,6 +72,7 @@ class App extends Component {
   render() {
     return (
       <div>
+        <MapaBotones />
         <h1> BUCHACA </h1>
         <table>
           <tbody>
