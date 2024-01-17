@@ -42,6 +42,9 @@ class App extends Component {
       let arr = this.state.listaBotones;
       let tmp = x;
       while (1) {
+        if (tmp == 0 && arr[tmp][y] == 1) {
+          break;
+        }
         if (arr[tmp][y] == 1) {
           tmp -= 1;
           break;
