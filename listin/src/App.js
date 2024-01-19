@@ -87,8 +87,8 @@ class App extends Component {
   render() {
     return (
       <div>
-        <Mostrar list={this.state.list} removeFromList={this.removeFromList} />
-        <Altas list={this.state.list} addToList={this.addToList} />
+        <Mostrar list={this.state.list} removeFromList={(value,list)=>this.removeFromList(value,list)} />
+        <Altas list={this.state.list} addToList={(v1,v2,v3)=>this.addToList()} />
         {/* update this.state doesnt work*/}
       </div >
     );
