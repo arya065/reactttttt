@@ -2,17 +2,22 @@ import './App.css';
 import { Component } from 'react';
 import { Button, Form, FormGroup, Label, Input } from 'reactstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import React, { useState } from 'react';
 
 const Altas = (props) => {
   // UTILICE HOOKS EN ESTE COMPONENTE
   //doesnt work
   // const [list, setList] = useState("");
+  const [list, setList] = useState(props.list);
   function handleClick(e) {
-    if (!checkRepeat(e)) {
-      let list = props.list;
-      props.addToList(e.target.form[0].value, e.target.form[1].value, e.target.form[2].value, list);
+    e.preventDefault();
+    // if (!checkRepeat(e)) {
+      // let list = props.list;
+      // props.addToList(e.target.form[0].value, e.target.form[1].value, e.target.form[2].value, list);
+      let newItem = e.target.form[0].value + ";" + e.target.form[1].value + ";" + e.target.form[2].value;
+      setList(prev => [...prev,newItem]);
       console.log(list);
-    }
+    // }
   }
   function checkRepeat(value) {
     let list = props.list;
@@ -51,7 +56,7 @@ const Mostrar = (props) => {
     <ul>
       {
         props.list.map((e) => (
-          <li>{e} <Button onClick={props.removeFromList(e, props.list)}>X</Button></li>
+          <li>{e} <Button onClick={() => props.removeFromList(e, props.list)}>X</Button></li>
         ))
       }
     </ul>
@@ -92,22 +97,3 @@ class App extends Component {
 
 
 export default App;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
