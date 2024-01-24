@@ -3,12 +3,20 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import { Alert, Row, Col, UncontrolledAccordion, AccordionItem, AccordionHeader, AccordionBody, Input, Button, Modal, ModalHeader, ModalBody, ModalFooter, FormGroup, Label } from 'reactstrap';
 const VentanaModalDiccionario = (props) => {
     const { className } = props;
+    const [value, setValue] = useState("CODIGO1|DESCRIPCION1");
     const handleChange = (event) => {
         // COMPLETA ESTA FUNCION
+        setValue(event.target.value);
     }
+    const resetHooks = () => {
+        setValue("CODIGO1|DESCRIPCION1");
+    }
+    useEffect(() => {
+        resetHooks();
+    }, []);
     return (
         <div>
-            <Modal isOpen={props.mostrar} toggle={props.toggle} className={className} onEntering={"//ESTO SE EJECUTA CUANDO MUESTRAS LA VENTANA"}>
+            <Modal isOpen={props.mostrar} toggle={props.toggle} className={className} onEntering={resetHooks}>
                 <ModalHeader toggle={props.toggle}>{props.titulo}</ModalHeader>
                 <ModalBody>
                     <FormGroup row>
@@ -30,7 +38,7 @@ const VentanaModalDiccionario = (props) => {
                     </FormGroup>
                 </ModalBody>
                 <ModalFooter>
-                    {"AQUÍ VA EL FÁRMACO ELEGIDO"}<Button color="primary" onClick={props.add}>{props.aceptar}</Button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    {value}<Button color="primary" onClick={() => props.add(value) && resetHooks()}>{props.aceptar}</Button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                 </ModalFooter>
             </Modal>
         </div>
@@ -44,18 +52,35 @@ class Filter extends Component {
         super(props);
         this.state = {
             isOpen: false,
+            valuesX: ["line 1", "line 2"],
+            valuesY: [],
+            current: 0
         }
     }
-
-    toggleModal() {
-        this.setState({ isOpen: !this.state.isOpen })
+    toggleModal(current) {
+        this.setState({ isOpen: !this.state.isOpen });
+        this.setState({ current: current });
     }
 
     add(datos) {
         //aqui hacer algo con los datos
-        this.toggleModal();
+        this.toggleModal(0);
+        if (this.state.current == 1) {
+            let tmp = this.state.valuesX;
+            this.setState({ valuesX: [...tmp, datos] });
+        } else if (this.state.current == 2) {
+            let tmp = this.state.valuesY;
+            this.setState({ valuesY: [...tmp, datos] });
+        }
     }
-
+    getAllValues(array) {
+        let str = "";
+        array.forEach(e => {
+            str += e + "\n";
+        });
+        str = str.slice(0, -1);
+        return str;
+    }
     render() {
         return (
             <>
@@ -68,19 +93,19 @@ class Filter extends Component {
                             <AccordionBody accordionId="1">
                                 <Row>
                                     <Col>
-                                        <Alert color="info">
+                                        <Alert color="info" id='uno'>
                                             Incluir X Medicamentos:
-                                            <Input type="textarea" name="rxseleccionar" />
-                                            <Button color="info" onClick={() => { this.toggleModal() }}>Add</Button>
+                                            <Input type="textarea" name="rxseleccionar" value={this.getAllValues(this.state.valuesX)} />
+                                            <Button color="info" onClick={() => { this.toggleModal(1) }}>Add</Button>
                                             {" "}
                                             <Button color="info" onClick={""}>Clear</Button>
                                         </Alert>
                                     </Col>
                                     <Col>
                                         <Alert color="danger">
-                                            Excluir X Medicamentos:
-                                            <Input type="textarea" name="rxenmascarar" />
-                                            <Button color="danger" onClick={() => { this.toggleModal() }}>Add</Button>
+                                            Excluir Y Medicamentos:
+                                            <Input type="textarea" name="rxenmascarar" value={this.getAllValues(this.state.valuesY)} />
+                                            <Button color="danger" onClick={() => { this.toggleModal(2) }}>Add</Button>
                                             {" "}
                                             <Button color="danger" onClick={""}>Clear</Button>
                                         </Alert>
@@ -90,12 +115,7 @@ class Filter extends Component {
                         </AccordionItem>
                     </UncontrolledAccordion>
                 </div>
-                <VentanaModalDiccionario
-                    add={(datos) => this.add(datos)}
-                    mostrar={this.state.isOpen}
-                    aceptar={"Añadir"}
-                    titulo={"VENTANA MODAL"}
-                />
+                <VentanaModalDiccionario add={(datos) => this.add(datos)} mostrar={this.state.isOpen} aceptar={"Añadir"} titulo={"VENTANA MODAL"} />
                 <br />
             </>
         )
