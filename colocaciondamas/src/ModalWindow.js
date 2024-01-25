@@ -8,12 +8,10 @@ const VentanaModalDiccionario = (props) => {
         // COMPLETA ESTA FUNCION
         setValue(event.target.value);
     }
-    const resetHooks = () => {
+    const resetHooks = (value) => {
+        props.add(value);
         setValue("CODIGO1|DESCRIPCION1");
     }
-    useEffect(() => {
-        resetHooks();
-    }, []);
     return (
         <div>
             <Modal isOpen={props.mostrar} toggle={props.toggle} className={className} onEntering={resetHooks}>
@@ -38,7 +36,7 @@ const VentanaModalDiccionario = (props) => {
                     </FormGroup>
                 </ModalBody>
                 <ModalFooter>
-                    {value}<Button color="primary" onClick={() => props.add(value) && resetHooks()}>{props.aceptar}</Button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    {value}<Button color="primary" onClick={() => resetHooks(value)}>{props.aceptar}</Button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                 </ModalFooter>
             </Modal>
         </div>
