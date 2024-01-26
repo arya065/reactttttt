@@ -14,7 +14,7 @@ const VentanaModalDiccionario = (props) => {
   const [listado, setValueListado] = useState(FARMACOS);
   const handleChange = (event) => {
     // console.log("list:", listado, "\n hook: ", value);
-    if (event.target.value != "" && event.target.value != "SELECCIONE UN FARMACO") {
+    if (event.target.value != "SELECCIONE UN FARMACO") {
       setValueListado(FARMACOS.filter((el) => {
         if (findInStr(el.descATC, event.target.value.toUpperCase())) {
           return el;
@@ -31,6 +31,9 @@ const VentanaModalDiccionario = (props) => {
     return str.slice(str.indexOf("|") + 1);
   }
   const getCode = (str) => {
+    if (str.indexOf("|") == -1) {
+      return "";
+    }
     return str.slice(0, str.indexOf("|"));
   }
   const findInStr = (str, find) => {
@@ -50,6 +53,7 @@ const VentanaModalDiccionario = (props) => {
       props.add(value, list);
       props.toggle();
       setValue("");
+      setCode("");
     }
   }
 
