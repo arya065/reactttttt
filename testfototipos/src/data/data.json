@@ -1,0 +1,201 @@
+{
+    "questions": [
+        {
+            "question": {
+                "text": "¿Cuál es el color natural de su piel cuando no está bronceada?",
+                "answers": [
+                    {
+                        "answer": "Rojiza, blanca",
+                        "points": 0
+                    },
+                    {
+                        "answer": "Blanca-beige",
+                        "points": 2
+                    },
+                    {
+                        "answer": "Beige",
+                        "points": 4
+                    },
+                    {
+                        "answer": "Marrón clara ",
+                        "points": 8
+                    },
+                    {
+                        "answer": "Marrón",
+                        "points": 12
+                    },
+                    {
+                        "answer": "Negra",
+                        "points": 16
+                    }
+                ]
+            }
+        },
+        {
+            "question": {
+                "text": "¿De qué color natural es su pelo?",
+                "answers": [
+                    {
+                        "answer": "Pelirrojo, rubio claro",
+                        "points": 0
+                    },
+                    {
+                        "answer": "Rubio, castaño claro ",
+                        "points": 2
+                    },
+                    {
+                        "answer": "Castaño",
+                        "points": 4
+                    },
+                    {
+                        "answer": "Castaño oscuro",
+                        "points": 8
+                    },
+                    {
+                        "answer": "Castaño oscuro-negro",
+                        "points": 12
+                    },
+                    {
+                        "answer": "Negro",
+                        "points": 16
+                    }
+                ]
+            }
+        },
+        {
+            "question": {
+                "text": "¿De qué color tiene los ojos?",
+                "answers": [
+                    {
+                        "answer": "Azul claro, verde claro, gris claro",
+                        "points": 0
+                    },
+                    {
+                        "answer": "Azules, verdes, grises",
+                        "points": 2
+                    },
+                    {
+                        "answer": "Grises, marrón claro",
+                        "points": 4
+                    },
+                    {
+                        "answer": "Marrones",
+                        "points": 8
+                    },
+                    {
+                        "answer": "Marrón oscuro",
+                        "points": 12
+                    },
+                    {
+                        "answer": "Negros",
+                        "points": 16
+                    }
+                ]
+            }
+        },
+        {
+            "question": {
+                "text": "¿Cuántas pecas tiene de manera natural en el cuerpo cuando no está bronceado?",
+                "answers": [
+                    {
+                        "answer": "Muchas",
+                        "points": 0
+                    },
+                    {
+                        "answer": "Algunas",
+                        "points": 2
+                    },
+                    {
+                        "answer": "Unas cuantas",
+                        "points": 4
+                    },
+                    {
+                        "answer": "Ninguna",
+                        "points": 8
+                    }
+                ]
+            }
+        },
+        {
+            "question": {
+                "text": "¿Qué categoría describe mejor su herencia genética?",
+                "answers": [
+                    {
+                        "answer": "Raza blanca de piel muy blanca",
+                        "points": 0
+                    },
+                    {
+                        "answer": "Raza blanca de piel clara",
+                        "points": 2
+                    },
+                    {
+                        "answer": "Raza blanca piel morena (Mediterráneo)",
+                        "points": 4
+                    },
+                    {
+                        "answer": "Oriente Medio, hindú, asiático, hispano-americano",
+                        "points": 8
+                    },
+                    {
+                        "answer": "Aborigen, africano, afroamericano",
+                        "points": 12
+                    }
+                ]
+            }
+        },
+        {
+            "question": {
+                "text": "¿Qué categoría describe mejor su potencial de QUEMADURA exponiéndose al sol una hora en verano?",
+                "answers": [
+                    {
+                        "answer": "Siempre se quema y no se broncea nunca",
+                        "points": 0
+                    },
+                    {
+                        "answer": "Habitualmente se quema, pero puede broncearse ligeramente",
+                        "points": 2
+                    },
+                    {
+                        "answer": "Se quema ocasionalmente, pero se broncea moderadamente",
+                        "points": 4
+                    },
+                    {
+                        "answer": "Nunca se quema y se broncea con facilidad",
+                        "points": 8
+                    },
+                    {
+                        "answer": "Raramente se quema y se broncea profundamente",
+                        "points": 10
+                    },
+                    {
+                        "answer": "Nunca se quema",
+                        "points": 12
+                    }
+                ]
+            }
+        },
+        {
+            "question": {
+                "text": "¿Qué categoría describe mejor su potencial de BRONCEADO?",
+                "answers": [
+                    {
+                        "answer": "Nunca se broncea",
+                        "points": 0
+                    },
+                    {
+                        "answer": "Se puede broncear ligeramente",
+                        "points": 2
+                    },
+                    {
+                        "answer": "Se puede broncear moderadamente",
+                        "points": 4
+                    },
+                    {
+                        "answer": "Se puede broncear profundamente",
+                        "points": 8
+                    }
+                ]
+            }
+        }
+    ]
+}
