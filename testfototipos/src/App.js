@@ -14,7 +14,6 @@ class App extends Component {
     };
   }
   getListQuestions() {
-    console.log(data.questions.map(e => console.log(e)));
     return data.questions;
   }
   addAnswer(i, value) {
