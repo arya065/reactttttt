@@ -18,9 +18,13 @@ class App extends Component {
   }
   addAnswer(i, value) {
     const tmp = this.state.answers;
+    let prev = 0;
+    if (tmp[i] != undefined) {
+      prev = tmp[i].points;
+    }
     tmp[i] = value;
     this.setState({ answers: tmp });
-    this.setState({ puntuacion: this.state.puntuacion + value.points });
+    this.setState({ puntuacion: this.state.puntuacion + value.points - prev });
   }
   showRes() {
     if (this.state.answers.includes() || this.state.answers.length < 7) {
@@ -35,6 +39,7 @@ class App extends Component {
         <div>
           <p>PUNTUACION TOTAL - {this.state.puntuacion}</p>
           <p>SU TIPO DE PIEL{this.getTipoPiel()}</p>
+          <img src={this.getPhoto()} />
         </div>
       )
     }
@@ -53,6 +58,22 @@ class App extends Component {
       return "TIPO DE PIEL V. La piel es oscura. Alta tolerancia";
     } else {
       return "TIPO DE PIEL VI. La piel es negra. Altísima tolerancia NIGNIGNIGNIGNIG";
+    }
+  }
+  getPhoto() {
+    let points = this.state.puntuacion;
+    if (points <= 7) {
+      return "./images/img/tipo1.png";
+    } else if (points <= 21) {
+      return "./images/img/tipo2.png";
+    } else if (points <= 42) {
+      return "./images/img/tipo3.png";
+    } else if (points <= 68) {
+      return "./images/img/tipo4.png";
+    } else if (points <= 84) {
+      return "./images/img/tipo5.png";
+    } else {
+      return "./images/img/tipo6.png";
     }
   }
   getColor(el) {
