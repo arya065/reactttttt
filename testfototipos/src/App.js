@@ -5,13 +5,42 @@ import data from './data/data.json';
 import './App.css';
 import axios from 'axios';
 
+function ShowAnswers(props) {
+  const [answers, setAll] = useState([]);
+  const view = () => {
+    console.log(props.open);
+    if (props.open) {
+      console.log("here");
+      apiGet();
+      console.log(answers);
+    }
+
+  }
+  const apiGet = () => {
+    axios
+      .get("http://localhost/Proyectos/API/apiTestfototipos/add/100/100")
+      .then((response) => {
+        setAll(response.data);
+      })
+      .catch((error) => {
+        console.log("ERRORRRRRRR", error);
+      });
+  };
+  return (
+    <>
+      {view()}
+    </>
+  );
+}
 class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
       listQuestions: this.getListQuestions(),
       answers: [],
-      puntuacion: 0
+      puntuacion: 0,
+      lookAll: false,
+      allAnswers: [],
     };
   }
   getListQuestions() {
@@ -77,6 +106,10 @@ class App extends Component {
       return "./images/img/tipo6.png";
     }
   }
+
+  handleClick() {
+    this.setState({ lookAll: !this.state.lookAll });
+  }
   getColor(el) {
     if (this.state.answers.includes(el)) {
       return "success";
@@ -108,6 +141,10 @@ class App extends Component {
           }
         </List>
         {this.showRes()}
+
+        <Button onClick={() => this.handleClick()}>Mirar todos resultados</Button>
+        {/* {this.view()} */}
+        <ShowAnswers open={this.state.lookAll}></ShowAnswers>
       </div>
     );
   }
