@@ -15,18 +15,15 @@ function ShowAnswers(props) {
       }
     }
     fetchData();
-  });
+  }, [props.status, props.handleClick, answers]);
   const view = async () => {
-    console.log("here");
     await apiGet();
-    console.log("answers:", answers);
   }
   const apiGet = async () => {
     axios
       .get("http://localhost/Proyectos/API/apiTestfototipos/add/100/100")
       .then((response) => {
         setAnswers(response.data);
-        console.log("response:", response.data);
       })
       .catch((error) => {
         console.log("ERRORRRRRRR", error);
@@ -34,11 +31,11 @@ function ShowAnswers(props) {
   };
   return (
     <div>
-      {/* <ul>
+      <ul>
         {answers.map((e, i) => (
-          <li>{e}</li>
+          <li>{e.result.id}</li>
         ))}
-      </ul> */}
+      </ul>
     </div>
   );
 }
