@@ -1,4 +1,4 @@
-import React, { Component, useState } from "react";
+import React, { Component, useState, useEffect } from "react";
 import { List, Button } from 'reactstrap';
 import "bootstrap/dist/css/bootstrap.min.css";
 import data from './data/data.json';
@@ -6,30 +6,40 @@ import './App.css';
 import axios from 'axios';
 
 function ShowAnswers(props) {
-  const [answers, setAll] = useState([]);
-  const view = () => {
-    console.log(props.open);
-    if (props.open) {
-      console.log("here");
-      apiGet();
-      console.log(answers);
+  const [answers, setAnswers] = useState([]);
+  useEffect(() => {
+    const fetchData = async () => {
+      if (props.status) {
+        view();
+        props.handleClick();
+      }
     }
-
+    fetchData();
+  });
+  const view = async () => {
+    console.log("here");
+    await apiGet();
+    console.log("answers:", answers);
   }
-  const apiGet = () => {
+  const apiGet = async () => {
     axios
       .get("http://localhost/Proyectos/API/apiTestfototipos/add/100/100")
       .then((response) => {
-        setAll(response.data);
+        setAnswers(response.data);
+        console.log("response:", response.data);
       })
       .catch((error) => {
         console.log("ERRORRRRRRR", error);
       });
   };
   return (
-    <>
-      {view()}
-    </>
+    <div>
+      {/* <ul>
+        {answers.map((e, i) => (
+          <li>{e}</li>
+        ))}
+      </ul> */}
+    </div>
   );
 }
 class App extends Component {
@@ -143,8 +153,7 @@ class App extends Component {
         {this.showRes()}
 
         <Button onClick={() => this.handleClick()}>Mirar todos resultados</Button>
-        {/* {this.view()} */}
-        <ShowAnswers open={this.state.lookAll}></ShowAnswers>
+        <ShowAnswers status={this.state.lookAll} handleClick={() => this.handleClick()}></ShowAnswers>
       </div>
     );
   }
