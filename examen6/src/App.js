@@ -54,18 +54,16 @@ const Saldo = (props) => {
 const Altas = (props) => {
     // ALTAS DE USUARIOS
     const [value, setValue] = useState([]);
-
+    useEffect(() => { console.log("value", value) }, [value]);
     const handleChange = (event) => {
         let attr = event.target.attributes.name.nodeValue;
         let res = event.target.value;
         let tmp = value;
-        console.log(attr);
         if (attr == "nombre") {
             tmp[1] = res;
         } else if (attr == "telefono") {
             if (parseInt(res)) {
                 tmp[0] = res;
-                console.log(res);
             }
         } else if (attr == "saldo") {
             if (parseInt(res) > 0) {
@@ -73,6 +71,7 @@ const Altas = (props) => {
             }
         }
         setValue(tmp);
+        console.log("values: ", value);
     }
     const send = () => {
         props.add(value);
@@ -88,7 +87,7 @@ const Altas = (props) => {
                     <Input
                         id="nombre"
                         name="nombre"
-                        type="Text" onChange={handleChange} />
+                        type="Text" onChange={(event) => handleChange(event)} value={value[0]} />
                 </Col>
                 <Label sm={1} > Teléfono: </Label>
                 <Col sm={2}>
@@ -165,7 +164,7 @@ class App extends Component {
             opcion: 0,
         };
     }
-    removeZero () {
+    removeZero() {
         let tmp = this.state.listaUsuarios;
         tmp.map((e, i) => {
             if (e[2] <= 0) {
@@ -174,7 +173,7 @@ class App extends Component {
         });
         this.setState({ listaUsuarios: tmp });
     }
-    addToList (value) {
+    addToList(value) {
         let err = (value.length != 3) || this.checkRepeat(value[0]);
         if (!err) {
             console.log("here");
@@ -188,7 +187,7 @@ class App extends Component {
             }
         }
     }
-    checkRepeat (value) {
+    checkRepeat(value) {
         let tmp = false;
         this.state.listaUsuarios.map((e) => {
             if (e[0] == value) {
@@ -197,20 +196,20 @@ class App extends Component {
         });
         return tmp;
     }
-    sum (tel, value) {
+    sum(tel, value) {
         this.state.listaUsuarios.map((e, i) => { if (e[0] == tel) { e[2] = parseInt(e[2]) + parseInt(value) } });
         this.forceUpdate();
         this.removeZero();
     }
-    mice (tel, value) {
+    mice(tel, value) {
         this.state.listaUsuarios.map((e, i) => { if (e[0] == tel) { e[2] = parseInt(e[2]) - parseInt(value) } });
         this.forceUpdate();
         this.removeZero();
     }
-    setOption (value) {
+    setOption(value) {
         this.setState({ opcion: value });
     }
-    showComp () {
+    showComp() {
         if (this.state.opcion == 1) {
             return (
                 <Altas add={(v) => this.addToList(v)}></Altas>
@@ -225,7 +224,7 @@ class App extends Component {
             )
         }
     }
-    borrar (t) {
+    borrar(t) {
         console.log("here");
         let tmp = this.state.listaUsuarios;
         tmp.map((e, i) => {
@@ -235,7 +234,7 @@ class App extends Component {
         });
         this.setState({ listaUsuarios: tmp });
     }
-    render () {
+    render() {
         console.log("lista:", this.state.listaUsuarios);
         return (
             <div className="App">
