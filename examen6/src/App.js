@@ -58,7 +58,7 @@ const Altas = (props) => {
     const handleChange = (event) => {
         let attr = event.target.attributes.name.nodeValue;
         let res = event.target.value;
-        let tmp = value;
+        let tmp = [...value];
         if (attr == "nombre") {
             tmp[1] = res;
         } else if (attr == "telefono") {
@@ -71,7 +71,6 @@ const Altas = (props) => {
             }
         }
         setValue(tmp);
-        console.log("values: ", value);
     }
     const send = () => {
         props.add(value);
