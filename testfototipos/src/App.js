@@ -10,20 +10,20 @@ function ShowAnswers(props) {
   useEffect(() => {
     const fetchData = async () => {
       if (props.status) {
-        view();
+        await apiGet();
         props.handleClick();
+        // document.cookie = 'passed=true; max-age=60'
+        // console.log(document.cookie);
       }
     }
     fetchData();
-  }, [props.status, props.handleClick, answers]);
-  const view = async () => {
-    await apiGet();
-  }
+  }, [props.status]);
   const apiGet = async () => {
     axios
-      .get("http://localhost/Proyectos/API/apiTestfototipos/add/100/100")
+      .get("http://localhost/Proyectos/API/apiTestfototipos/add/" + props.points + "/100")
       .then((response) => {
         setAnswers(response.data);
+        console.log(response.data);
       })
       .catch((error) => {
         console.log("ERRORRRRRRR", error);
@@ -32,9 +32,12 @@ function ShowAnswers(props) {
   return (
     <div>
       <ul>
-        {answers.map((e, i) => (
-          <li>{e.result.id}</li>
-        ))}
+        {/* {answers.map((e, i) => (
+          <li>
+            <span>ID:{e.result.id}</span>;
+            <span>Puntos:{e.result.points}</span>
+          </li>
+        ))} */}
       </ul>
     </div>
   );
@@ -115,7 +118,11 @@ class App extends Component {
   }
 
   handleClick() {
+    // if (this.state.answers.includes() || this.state.answers.length < 7) {
+    //   console.log("You need to finish form first");
+    // } else {
     this.setState({ lookAll: !this.state.lookAll });
+    // }
   }
   getColor(el) {
     if (this.state.answers.includes(el)) {
@@ -150,7 +157,7 @@ class App extends Component {
         {this.showRes()}
 
         <Button onClick={() => this.handleClick()}>Mirar todos resultados</Button>
-        <ShowAnswers status={this.state.lookAll} handleClick={() => this.handleClick()}></ShowAnswers>
+        <ShowAnswers status={this.state.lookAll} handleClick={() => this.handleClick()} points={this.state.puntuacion}></ShowAnswers>
       </div>
     );
   }
