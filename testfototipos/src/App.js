@@ -181,7 +181,7 @@ class App extends Component {
         </List>
         {this.showRes()}
 
-        <Button onClick={() => this.handleClick()}>Mirar todos resultados</Button>
+        <Button onClick={() => this.handleClick()}>Enviar y mirar todos resultados</Button>
         <ShowAnswers status={this.state.lookAll} handleClick={() => this.handleClick()} points={this.state.puntuacion}></ShowAnswers>
       </div>
     );
