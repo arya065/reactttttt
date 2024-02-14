@@ -1,5 +1,5 @@
 import React, { Component, useState, useEffect } from "react";
-import { List, Button } from 'reactstrap';
+import { List, Button, Progress } from 'reactstrap';
 import "bootstrap/dist/css/bootstrap.min.css";
 import data from './data/data.json';
 import './App.css';
@@ -32,6 +32,7 @@ function ShowAnswers(props) {
           apiGet();
         } else {
           setAnswers(response.data);
+          // props.getParts(response.data);
         }
       })
       .catch((error) => {
@@ -49,6 +50,7 @@ function ShowAnswers(props) {
       .then((response) => {
         setAnswers(response.data);
         console.log("get response:", response.data);
+        // props.getParts(response.data);
       })
       .catch((error) => {
         console.log("ERRORRRRRRR", error);
@@ -56,6 +58,15 @@ function ShowAnswers(props) {
   };
   return (
     <div>
+      {/* https://reactstrap.github.io/?path=/docs/components-progress--progress */}
+      <Progress style={{ width: "80%" }}>
+        {props.getParts(answers).map((e, i) => (
+          <Progress bar color={e[1]} value="5">
+            {console.log(e[1])}
+          </Progress>
+        ))}
+      </Progress>
+
       <ul>
         {answers.map((e, i) => (
           <li key={i}>
@@ -143,11 +154,11 @@ class App extends Component {
   }
 
   handleClick() {
-    if (this.state.answers.includes() || this.state.answers.length < 7) {
-      console.log("You need to finish form first");
-    } else {
+    // if (this.state.answers.includes() || this.state.answers.length < 7) {
+    //   console.log("You need to finish form first");
+    // } else {
     this.setState({ lookAll: !this.state.lookAll });
-    }
+    // }
   }
   getColor(el) {
     if (this.state.answers.includes(el)) {
@@ -155,6 +166,39 @@ class App extends Component {
     } else {
       return "secondary";
     }
+  }
+  getParts(answers) {
+    if (answers.length != 0) {
+      // let res = Array.from({ length: 6 }, () => Array.from({ length: 2 }), () => 1);
+      let res = JSON.parse(JSON.stringify(Array(6).fill(Array(2).fill(0))));
+      // console.log("ini", res);
+      // console.log("here", answers);
+      res[0][1] = "success";
+      res[1][1] = "info";
+      res[2][1] = "warning";
+      res[3][1] = "danger";
+      res[4][1] = "Tipo 5";
+      res[5][1] = "Tipo 6";
+      answers.map((e) => {
+        console.log(e.result.points);
+        if (e.result.points <= 7) {
+          res[0][0]++;
+        } else if (e.result.points <= 21) {
+          res[1][0] += 1;
+        } else if (e.result.points <= 42) {
+          res[2][0] += 1;
+        } else if (e.result.points <= 68) {
+          res[3][0] += 1;
+        } else if (e.result.points <= 84) {
+          res[4][0] += 1;
+        } else {
+          res[5][0] += 1;
+        }
+      });
+      // console.log("analysis:", res);
+      return res;
+    }
+    return [[0], ["Tipo 0"]];
   }
   render() {
     return (
@@ -182,7 +226,7 @@ class App extends Component {
         {this.showRes()}
 
         <Button onClick={() => this.handleClick()}>Enviar y mirar todos resultados</Button>
-        <ShowAnswers status={this.state.lookAll} handleClick={() => this.handleClick()} points={this.state.puntuacion}></ShowAnswers>
+        <ShowAnswers status={this.state.lookAll} handleClick={() => this.handleClick()} points={this.state.puntuacion} getParts={(answers) => this.getParts(answers)}></ShowAnswers>
       </div>
     );
   }
