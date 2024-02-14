@@ -10,20 +10,45 @@ function ShowAnswers(props) {
   useEffect(() => {
     const fetchData = async () => {
       if (props.status) {
-        await apiGet();
+        await apiPost();
         props.handleClick();
-        // document.cookie = 'passed=true; max-age=60'
-        // console.log(document.cookie);
       }
     }
     fetchData();
   }, [props.status]);
+  const apiPost = async () => {
+    axios
+      .post("http://localhost/Proyectos/API/apiTestfototipos/add/" + props.points + "/100",
+        {},//здесь должны быть данные, но они у меня в ссылке
+        {
+          withCredentials: true, // отправлять куки 
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        })
+      .then((response) => {
+        console.log("post response:", response.data);
+        if (response.data.message) {
+          apiGet();
+        } else {
+          setAnswers(response.data);
+        }
+      })
+      .catch((error) => {
+        console.log("ERRORRRRRRR", error);
+      });
+  };
   const apiGet = async () => {
     axios
-      .get("http://localhost/Proyectos/API/apiTestfototipos/add/" + props.points + "/100")
+      .get("http://localhost/Proyectos/API/apiTestfototipos/take/all", {
+        withCredentials: true, // отправлять куки 
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      })
       .then((response) => {
         setAnswers(response.data);
-        console.log(response.data);
+        console.log("get response:", response.data);
       })
       .catch((error) => {
         console.log("ERRORRRRRRR", error);
@@ -32,12 +57,12 @@ function ShowAnswers(props) {
   return (
     <div>
       <ul>
-        {/* {answers.map((e, i) => (
-          <li>
+        {answers.map((e, i) => (
+          <li key={i}>
             <span>ID:{e.result.id}</span>;
             <span>Puntos:{e.result.points}</span>
           </li>
-        ))} */}
+        ))}
       </ul>
     </div>
   );
@@ -118,11 +143,11 @@ class App extends Component {
   }
 
   handleClick() {
-    // if (this.state.answers.includes() || this.state.answers.length < 7) {
-    //   console.log("You need to finish form first");
-    // } else {
+    if (this.state.answers.includes() || this.state.answers.length < 7) {
+      console.log("You need to finish form first");
+    } else {
     this.setState({ lookAll: !this.state.lookAll });
-    // }
+    }
   }
   getColor(el) {
     if (this.state.answers.includes(el)) {
