@@ -56,17 +56,26 @@ function ShowAnswers(props) {
         console.log("ERRORRRRRRR", error);
       });
   };
+  const ProgressBar = () => {
+    if (answers.length > 0) {
+      return (
+        <p>
+          <Progress style={{ width: "90%", margin: "auto" }} multi>
+            {props.getParts(answers).map((e, i) => (
+              // <>{console.log(e[0] + ":" + e[1])}</>
+              <Progress bar value={e[0] / answers.length * 100} style={{ background: e[1] }}>
+                Cantidad:{e[0]}
+              </Progress>
+            ))}
+          </Progress>
+        </p>
+      )
+    }
+  }
   return (
     <div>
       {/* https://reactstrap.github.io/?path=/docs/components-progress--progress */}
-      <Progress style={{ width: "80%" }}>
-        {props.getParts(answers).map((e, i) => (
-          <Progress bar color={e[1]} value="5">
-            {console.log(e[1])}
-          </Progress>
-        ))}
-      </Progress>
-
+      {ProgressBar()}
       <ul>
         {answers.map((e, i) => (
           <li key={i}>
@@ -173,14 +182,13 @@ class App extends Component {
       let res = JSON.parse(JSON.stringify(Array(6).fill(Array(2).fill(0))));
       // console.log("ini", res);
       // console.log("here", answers);
-      res[0][1] = "success";
-      res[1][1] = "info";
-      res[2][1] = "warning";
-      res[3][1] = "danger";
-      res[4][1] = "Tipo 5";
-      res[5][1] = "Tipo 6";
+      res[0][1] = "green";
+      res[1][1] = "blue";
+      res[2][1] = "orange";
+      res[3][1] = "red";
+      res[4][1] = "black";
+      res[5][1] = "purple";
       answers.map((e) => {
-        console.log(e.result.points);
         if (e.result.points <= 7) {
           res[0][0]++;
         } else if (e.result.points <= 21) {
@@ -195,7 +203,7 @@ class App extends Component {
           res[5][0] += 1;
         }
       });
-      // console.log("analysis:", res);
+      console.log("analysis:", res);
       return res;
     }
     return [[0], ["Tipo 0"]];
