@@ -163,11 +163,11 @@ class App extends Component {
   }
 
   handleClick() {
-    // if (this.state.answers.includes() || this.state.answers.length < 7) {
-    //   console.log("You need to finish form first");
-    // } else {
-    this.setState({ lookAll: !this.state.lookAll });
-    // }
+    if (this.state.answers.includes() || this.state.answers.length < 7) {
+      console.log("You need to finish form first");
+    } else {
+      this.setState({ lookAll: !this.state.lookAll });
+    }
   }
   getColor(el) {
     if (this.state.answers.includes(el)) {
@@ -208,6 +208,12 @@ class App extends Component {
     }
     return [[0], ["Tipo 0"]];
   }
+  getMessage() {
+    if (this.state.answers.includes() || this.state.answers.length < 7) {
+      return "Tienes que terminar formulario";
+    }
+    return "Enviar y mirar todos resultados";
+  }
   render() {
     return (
       <div>
@@ -233,7 +239,7 @@ class App extends Component {
         </List>
         {this.showRes()}
 
-        <Button onClick={() => this.handleClick()}>Enviar y mirar todos resultados</Button>
+        <Button onClick={() => this.handleClick()}>{this.getMessage()}</Button>
         <ShowAnswers status={this.state.lookAll} handleClick={() => this.handleClick()} points={this.state.puntuacion} getParts={(answers) => this.getParts(answers)}></ShowAnswers>
       </div>
     );
