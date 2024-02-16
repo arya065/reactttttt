@@ -21,7 +21,7 @@ function ShowAnswers(props) {
   //ask api
   const apiPost = async () => {
     axios
-      .post("https://www.thematic-learning.com/2DAW2024/ALEXEY/apiTestfototipos/add/" + props.points + "/100",
+      .post("http://localhost/Proyectos/API/apiTestfototipos/add/" + props.points + "/100",
         {},//data
         {
           withCredentials: true, // send cookies 
@@ -42,7 +42,7 @@ function ShowAnswers(props) {
   };
   const apiGet = async () => {
     axios
-      .get("https://www.thematic-learning.com/2DAW2024/ALEXEY/apiTestfototipos/take/all", {
+      .get("http://localhost/Proyectos/API/apiTestfototipos/take/all", {
         withCredentials: true, // send cookies
         headers: {
           'Content-Type': 'application/json',
