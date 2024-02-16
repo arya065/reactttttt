@@ -182,12 +182,12 @@ class App extends Component {
       let res = JSON.parse(JSON.stringify(Array(6).fill(Array(2).fill(0))));
       // console.log("ini", res);
       // console.log("here", answers);
-      res[0][1] = "green";
-      res[1][1] = "blue";
-      res[2][1] = "orange";
-      res[3][1] = "red";
-      res[4][1] = "black";
-      res[5][1] = "purple";
+      res[0][1] = "#0213f7";
+      res[1][1] = "#0bf702";
+      res[2][1] = "#f7021b";
+      res[3][1] = "#f79102";
+      res[4][1] = "#f702f3";
+      res[5][1] = "#02eff7";
       answers.map((e) => {
         if (e.result.points <= 7) {
           res[0][0]++;
