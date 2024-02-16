@@ -5,6 +5,7 @@ import data from './data/data.json';
 import './App.css';
 import axios from 'axios';
 
+//show answers comp with show statistics
 function ShowAnswers(props) {
   const [answers, setAnswers] = useState([]);
   useEffect(() => {
@@ -16,12 +17,14 @@ function ShowAnswers(props) {
     }
     fetchData();
   }, [props.status]);
+
+  //ask api
   const apiPost = async () => {
     axios
       .post("http://localhost/Proyectos/API/apiTestfototipos/add/" + props.points + "/100",
-        {},//здесь должны быть данные, но они у меня в ссылке
+        {},//data
         {
-          withCredentials: true, // отправлять куки 
+          withCredentials: true, // send cookies 
           headers: {
             'Content-Type': 'application/json',
           },
@@ -32,7 +35,6 @@ function ShowAnswers(props) {
           apiGet();
         } else {
           setAnswers(response.data);
-          // props.getParts(response.data);
         }
       })
       .catch((error) => {
@@ -42,7 +44,7 @@ function ShowAnswers(props) {
   const apiGet = async () => {
     axios
       .get("http://localhost/Proyectos/API/apiTestfototipos/take/all", {
-        withCredentials: true, // отправлять куки 
+        withCredentials: true, // send cookies
         headers: {
           'Content-Type': 'application/json',
         },
@@ -50,12 +52,12 @@ function ShowAnswers(props) {
       .then((response) => {
         setAnswers(response.data);
         console.log("get response:", response.data);
-        // props.getParts(response.data);
       })
       .catch((error) => {
         console.log("ERRORRRRRRR", error);
       });
   };
+  //show statistics
   const ProgressBar = () => {
     if (answers.length > 0) {
       return (
@@ -74,7 +76,6 @@ function ShowAnswers(props) {
   }
   return (
     <div>
-      {/* https://reactstrap.github.io/?path=/docs/components-progress--progress */}
       {ProgressBar()}
       <ul>
         {answers.map((e, i) => (
@@ -87,6 +88,7 @@ function ShowAnswers(props) {
     </div>
   );
 }
+
 class App extends Component {
   constructor(props) {
     super(props);
@@ -98,9 +100,11 @@ class App extends Component {
       allAnswers: [],
     };
   }
+
   getListQuestions() {
     return data.questions;
   }
+
   addAnswer(i, value) {
     const tmp = this.state.answers;
     let prev = 0;
@@ -111,6 +115,7 @@ class App extends Component {
     this.setState({ answers: tmp });
     this.setState({ puntuacion: this.state.puntuacion + value.points - prev });
   }
+
   showRes() {
     if (this.state.answers.includes() || this.state.answers.length < 7) {
       return (
@@ -129,6 +134,7 @@ class App extends Component {
       )
     }
   }
+
   getTipoPiel() {
     let points = this.state.puntuacion;
     if (points <= 7) {
@@ -145,6 +151,7 @@ class App extends Component {
       return "TIPO DE PIEL VI. La piel es negra. Altísima tolerancia NIGNIGNIGNIGNIG";
     }
   }
+
   getPhoto() {
     let points = this.state.puntuacion;
     if (points <= 7) {
@@ -169,6 +176,7 @@ class App extends Component {
       this.setState({ lookAll: !this.state.lookAll });
     }
   }
+
   getColor(el) {
     if (this.state.answers.includes(el)) {
       return "success";
@@ -176,12 +184,11 @@ class App extends Component {
       return "secondary";
     }
   }
+
   getParts(answers) {
     if (answers.length != 0) {
       // let res = Array.from({ length: 6 }, () => Array.from({ length: 2 }), () => 1);
       let res = JSON.parse(JSON.stringify(Array(6).fill(Array(2).fill(0))));
-      // console.log("ini", res);
-      // console.log("here", answers);
       res[0][1] = "#0213f7";
       res[1][1] = "#0bf702";
       res[2][1] = "#f7021b";
@@ -208,12 +215,14 @@ class App extends Component {
     }
     return [[0], ["Tipo 0"]];
   }
+
   getMessage() {
     if (this.state.answers.includes() || this.state.answers.length < 7) {
       return "Tienes que terminar formulario";
     }
     return "Enviar y mirar todos resultados";
   }
+  
   render() {
     return (
       <div>
