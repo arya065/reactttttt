@@ -135,17 +135,17 @@ class App extends Component {
   getTipoPiel() {
     let points = this.state.puntuacion;
     if (points <= 7) {
-      return "TIPO DE PIEL I. Muy sensible a la luz solar";
+      return "TIPO DE PIEL I. Muy sensible a la luz solar.";
     } else if (points <= 21) {
-      return "TIPO DE PIEL II. Sensible a la luz solar";
+      return "TIPO DE PIEL II. Sensible a la luz solar.";
     } else if (points <= 42) {
-      return "TIPO DE PIEL III. Sensibilidad normal a la luz solar";
+      return "TIPO DE PIEL III. Sensibilidad normal a la luz solar.";
     } else if (points <= 68) {
-      return "TIPO DE PIEL IV. La piel tiene tolerancia a la luz solar";
+      return "TIPO DE PIEL IV. La piel tiene tolerancia a la luz solar.";
     } else if (points <= 84) {
-      return "TIPO DE PIEL V. La piel es oscura. Alta tolerancia";
+      return "TIPO DE PIEL V. La piel es oscura. Alta tolerancia.";
     } else {
-      return "TIPO DE PIEL VI. La piel es negra. Altísima tolerancia NIGNIGNIGNIGNIG";
+      return "TIPO DE PIEL VI. La piel es negra. Altísima tolerancia.";
     }
   }
 
