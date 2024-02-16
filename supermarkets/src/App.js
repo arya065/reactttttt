@@ -3,6 +3,25 @@ import { List, Button, Progress, Popover, PopoverHeader, PopoverBody } from 'rea
 import "bootstrap/dist/css/bootstrap.min.css";
 import './App.css';
 import axios from 'axios';
+// https://reactstrap.github.io/?path=/docs/components-popover--update
+
+function Cell(props) {
+  const [status, setStatus] = useState(false);
+  const handleClick = () => {
+    this.setState({ popOpen: !this.state.popover });
+  }
+  return (
+    <>
+      <Button id={"btn" + props.i} type="button" style={{ width: "60px", margin: "3px", background: this.mixColorsRGB([0, 255, 0], [200, 80, 255]) }} onClick={() => this.handleClick()}>
+        {props.e}
+      </Button>
+      <Popover isOpen={this.state.popOpen} flip target={"btn" + props.i} trigger="click">
+        <PopoverHeader>Quieres poner mercado aqui?</PopoverHeader>
+        <PopoverBody>si</PopoverBody>
+      </Popover>
+    </>
+  )
+}
 class App extends Component {
   constructor(props) {
     super(props);
@@ -40,28 +59,18 @@ class App extends Component {
             return (<br />)
           }
           return (
-            <>
-              <Button id={"h"} type="button" style={{ width: "60px", margin: "3px", background: this.mixColorsRGB([0, 255, 0], [200, 0, 255]) }}>
-                {e}
-              </Button>
-              <Popover flip target={"h"} trigger="click">
-                <PopoverHeader>Quieres poner mercado aqui?</PopoverHeader>
-                <PopoverBody>si</PopoverBody>
-              </Popover>
-            </>
+            <></>
           )
         })}
-        <br></br>
-        <br></br>
-        <br></br>
-        <br></br>
-        <Button id={"Testid"} type="button" style={{ width: "60px", margin: "3px", background: this.mixColorsRGB([0, 255, 0], [200, 0, 255]) }} onClick={() => this.handleClick()}>
-          test
-        </Button>
-        <Popover isOpen={this.state.popOpen} flip target={"Testid"} trigger="focus">
-          <PopoverHeader>Quieres poner mercado aqui?</PopoverHeader>
-          <PopoverBody>si</PopoverBody>
-        </Popover>
+        <>
+          <Button id={"h"} type="button" style={{ width: "60px", margin: "3px", background: this.mixColorsRGB([0, 255, 0], [200, 80, 255]) }} onClick={() => this.handleClick()}>
+            test
+          </Button>
+          <Popover isOpen={this.state.popOpen} flip target={"h"} trigger="click">
+            <PopoverHeader>Quieres poner mercado aqui?</PopoverHeader>
+            <PopoverBody>si</PopoverBody>
+          </Popover>
+        </>
       </div>
     )
   }
