@@ -30,7 +30,6 @@ function ShowAnswers(props) {
           },
         })
       .then((response) => {
-        console.log("post response:", response.data);
         if (response.data.message) {
           apiGet();
         } else {
@@ -51,7 +50,6 @@ function ShowAnswers(props) {
       })
       .then((response) => {
         setAnswers(response.data);
-        console.log("get response:", response.data);
       })
       .catch((error) => {
         console.log("ERRORRRRRRR", error);
@@ -64,7 +62,6 @@ function ShowAnswers(props) {
         <p>
           <Progress style={{ width: "90%", margin: "auto" }} multi>
             {props.getParts(answers).map((e, i) => (
-              // <>{console.log(e[0] + ":" + e[1])}</>
               <Progress bar value={e[0] / answers.length * 100} style={{ background: e[1] }}>
                 Cantidad:{e[0]}
               </Progress>
@@ -210,7 +207,6 @@ class App extends Component {
           res[5][0] += 1;
         }
       });
-      console.log("analysis:", res);
       return res;
     }
     return [[0], ["Tipo 0"]];
@@ -222,7 +218,7 @@ class App extends Component {
     }
     return "Enviar y mirar todos resultados";
   }
-  
+
   render() {
     return (
       <div>

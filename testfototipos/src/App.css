@@ -41,3 +41,6 @@
 .list-questions {
   list-style-type: decimal;
 }
+button{
+  margin: 3px;
+}
