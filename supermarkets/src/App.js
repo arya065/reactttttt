@@ -2,24 +2,56 @@ import React, { Component, useState, useEffect } from "react";
 import { List, Button, Progress, Popover, PopoverHeader, PopoverBody } from 'reactstrap';
 import "bootstrap/dist/css/bootstrap.min.css";
 import './App.css';
-import axios from 'axios';
 // https://reactstrap.github.io/?path=/docs/components-popover--update
 
 function Cell(props) {
   const [status, setStatus] = useState(false);
+  const [color, setColor] = useState(props.mix([100, 0, 50], [100, 0, 50]));
+
   const handleClick = () => {
-    this.setState({ popOpen: !this.state.popover });
+    setStatus(!status);
   }
+
+  const printShop = () => {
+    if (props.shops.find((e) => e == props.i)) {
+      setColor(props.mix(makeRandomColor(), makeRandomColor(), 50));
+    }
+  }
+
+  const randInt = (multi) => {
+    return Math.floor(Math.random() * multi);
+  }
+
+  //добавить шаг со смещением
+  //таблица цветов
+  //алг для hue, остальное в рандом
+  //таблица с hue, но перемешанный
+  const makeRandomColor = () => {
+    return [randInt(360), randInt(100), randInt(100)];
+  }
+
+  useEffect(() => {
+    //добавить сюда условие изменения, после выбора магазина и при повторном клике меняется цвет
+    printShop();
+  }, [status, setStatus]);
+
   return (
-    <>
-      <Button id={"btn" + props.i} type="button" style={{ width: "60px", margin: "3px", background: this.mixColorsRGB([0, 255, 0], [200, 80, 255]) }} onClick={() => this.handleClick()}>
+    <span
+    // onMouseEnter={() => setStatus(true)} 
+    // onMouseLeave={() => setStatus(false)}
+    >
+      <Button id={"btn" + props.i} type="button" style={{ width: "60px", margin: "3px", background: color }} onClick={() => handleClick()}>
         {props.e}
       </Button>
-      <Popover isOpen={this.state.popOpen} flip target={"btn" + props.i} trigger="click">
+      <Popover isOpen={status} target={"btn" + props.i} trigger="legacy">
         <PopoverHeader>Quieres poner mercado aqui?</PopoverHeader>
-        <PopoverBody>si</PopoverBody>
+        <PopoverBody>
+          <div>Poblacion:{props.e}</div>
+          <div>Index de zona:{props.e}</div>
+          <Button onClick={() => { props.addShop(props.i); setStatus(false) }}>Si</Button>
+        </PopoverBody>
       </Popover>
-    </>
+    </span>
   )
 }
 class App extends Component {
@@ -37,21 +69,29 @@ class App extends Component {
         1, 2, 15, 43, 34, 2, 12, 2, 3,
         1, 0, 12, 3, 0, 0, 21, 2, 2
       ],
-      popOpen: false,
+      shops: [],
     };
   }
-  mixColorsRGB(color1, color2) {
-    // let red = 0, green = 0, blue = 0;
-    let red = color1[0] + color2[0];
-    let green = color1[1] + color2[1];
-    let blue = color1[2] + color2[2];
-    return ("rgb(" + Math.round(red / 2) + "," + Math.round(green / 2) + "," + Math.round(blue / 2) + ")");
+
+  mixColorsRGB(color1, color2, saturation = 0, brightness = 50) {
+    let h = parseInt(Math.floor((color1[0] + color2[0]) / 2));
+    let s = parseInt(Math.floor((color1[1] + color2[1]) / 2));
+    let l = parseInt(Math.floor((color1[2] + color2[2]) / 2));
+    if (s < saturation) {
+      s = saturation;
+    }
+    if (l > brightness) {
+      l = brightness;
+    }
+    return ("hsl(" + h + "," + s + "%," + l + "%" + ")");
   }
-  handleClick() {
-    this.setState({ popOpen: !this.state.popover });
+  addShopIndex(i) {
+    this.setState({ shops: [...this.state.shops, i] });
+  }
+  componentDidUpdate() {
+    console.log(this.state);
   }
   render() {
-    // console.log(this.mixColorsRGB([255, 255, 255], [58, 89, 89]));
     return (
       <div>
         {this.state.poblacion.map((e, i) => {
@@ -59,18 +99,11 @@ class App extends Component {
             return (<br />)
           }
           return (
-            <></>
+            <>
+              <Cell mix={(color1, color2, brightness) => this.mixColorsRGB(color1, color2, brightness)} shops={this.state.shops} addShop={(i) => this.addShopIndex(i)} e={e} i={i}></Cell>
+            </>
           )
         })}
-        <>
-          <Button id={"h"} type="button" style={{ width: "60px", margin: "3px", background: this.mixColorsRGB([0, 255, 0], [200, 80, 255]) }} onClick={() => this.handleClick()}>
-            test
-          </Button>
-          <Popover isOpen={this.state.popOpen} flip target={"h"} trigger="click">
-            <PopoverHeader>Quieres poner mercado aqui?</PopoverHeader>
-            <PopoverBody>si</PopoverBody>
-          </Popover>
-        </>
       </div>
     )
   }
