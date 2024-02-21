@@ -145,10 +145,11 @@ class App extends Component {
   }
 
   componentDidUpdate() {
+    this.updateCells();
     console.log(this.state);
   }
 
-  createCells() {
+  createCells() {//parse cells
     //cells->[i]:[color,value,closest,isShop]
     // closest-> index,color,dist
     let cells;
@@ -158,13 +159,23 @@ class App extends Component {
     this.setState({ cells: { ...cells } });
   }
 
-  addShop(i) {
+  updateCells() {
+    Object.keys(this.state.cells).map((i) => {
+      this.getShortest(i);
+    });
+  }
+
+  addShop(i) {//add to shops list
     //shop->[i]:[color,underControl]
     let color = this.makeRandomColor();
     this.setState({ shops: { ...this.state.shops, [i]: color } });
+    //cng isShop
+    let tmp = this.state.cells;
+    tmp[i][3] = true;
+    this.setState({ cells: tmp });
   }
 
-  checkInShops(i) {
+  checkInShops(i) {//check if exist in shops list
     return this.state.shops[i] == undefined ? false : true;
   }
 
@@ -205,7 +216,7 @@ class App extends Component {
     return [this.randInt(360), 100, this.randInt(20) + 40];
   }
 
-  shopCell(e, i) {
+  shopCell(e, i) {//render shop cell or normal cell
     const isShop = this.checkInShops(i);
     if (isShop) {
       return (
@@ -217,6 +228,29 @@ class App extends Component {
       )
     }
   }
+
+
+  getShortest(i) {
+    if (this.state.shops != undefined && !this.state.cells[i][3]) {
+      let closest = [Infinity, -1];
+      this.state.shops.filter((e, ind) => {//нельзя сюда фильтр ставить
+        let dist = this.getDistance(i, ind);
+        if (dist < closest[0]) {
+          closest = [dist, ind];
+        } else if (dist == closest[0]) {
+          closest.push([dist, ind]);
+        }
+      });
+      console.log("closest", closest);
+    }
+  }
+
+  getDistance(i, y) {//distance between 2 cells
+    let coord1 = [Math.floor(i / 9), (i % 9)];
+    let coord2 = [Math.floor(y / 9), (y % 9)];
+    return [Math.abs(coord1[0] - coord2[0]) + Math.abs(coord1[1] - coord2[1]), i];
+  }
+
   render() {
     console.log("rerender");
     return (
