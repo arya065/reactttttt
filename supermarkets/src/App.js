@@ -101,17 +101,31 @@ import './App.css';
 // }
 
 function Cell(props) {
+  const [status, setStatus] = useState(false);
+  const handleClick = () => {
+    setStatus(!status);
+  }
   return (
     <span
     // onMouseEnter={() => setStatus(true)} 
     // onMouseLeave={() => setStatus(false)}
     >
-      <Button type="button" style={{ width: "60px", margin: "3px", background: "hsl(" + props.color[0] + "," + props.color[1] + "%," + props.color[2] + "%" + ")" }} >
+      <Button id={"btn" + props.i} type="button"
+        style={{ width: "60px", margin: "3px", background: "hsl(" + props.color[0] + "," + props.color[1] + "%," + props.color[2] + "%" + ")" }}
+        onClick={() => handleClick()}
+      >
         <span style={{ mixBlendMode: "difference" }}>{/* реверс цвета */}
           {props.value}
         </span>
       </Button>
-
+      <Popover isOpen={status} target={"btn" + props.i} trigger="legacy">
+        <PopoverHeader>Quieres poner mercado aqui?</PopoverHeader>
+        <PopoverBody>
+          <div>Poblacion:{props.value}</div>
+          <div>Index de zona:{props.value}</div>
+          <Button onClick={() => { props.addShop(props.i); setStatus(false) }}>Si</Button>
+        </PopoverBody>
+      </Popover>
     </span>
   )
 }
@@ -135,7 +149,7 @@ class App extends Component {
   }
 
   createCells() {
-    //cells->[i]:[color,value,closest]
+    //cells->[i]:[color,value,closest,isShop]
     // closest-> index,color,dist
     let cells;
     this.state.poblacion.map((e, i) => {
@@ -194,22 +208,12 @@ class App extends Component {
   shopCell(e, i) {
     const isShop = this.checkInShops(i);
     if (isShop) {
-      console.log("shop here:", i, ";", e);
       return (
-        <Cell
-          color={this.getValuesShops(i)[0]}
-          value={e}
-          closest={0}
-          population={0}
-        ></Cell>
+        <Cell addShop={(i) => this.addShop(i)} color={this.getValuesShops(i)} value={"shop"} i={i}></Cell>
       )
     } else {
       return (
-        <Cell
-          color={this.getValuesShops(i)[0]}
-          value={e}
-          closest={0}
-        ></Cell>
+        <Cell addShop={(i) => this.addShop(i)} color={this.getValuesCells(i)[0]} value={e} i={i}></Cell>
       )
     }
   }
@@ -219,23 +223,16 @@ class App extends Component {
       <div>
         <Button onClick={() => this.addShop(1)}>add shop1</Button>
         <Button onClick={() => this.addShop(8)}>add shop8</Button>
-        <Button onClick={() => console.log(this.checkInShops(5))}>show if in shops</Button>
+        {/* <Button onClick={() => console.log(this.checkInShops(5))}>show if in shops</Button> */}
 
-        {this.state.poblacion.map((e, i) => {
-          if ((i) % 9 == 0) {
-            return (
-              <>
-                <br />
-                {this.shopCell(e, i)}
-              </>
-            )
-          }
-          return (
+        {
+          Object.keys(this.state.cells).map((i) => (
             <>
-              {this.shopCell(e, i)}
+              {i % 9 == 0 ? <br /> : null}
+              {this.shopCell(this.state.cells[i][1], i)}
             </>
-          )
-        })}
+          ))
+        }
       </div>
     )
   }
