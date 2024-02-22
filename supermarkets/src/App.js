@@ -105,9 +105,6 @@ function Cell(props) {
   const handleClick = () => {
     setStatus(!status);
   }
-  // useEffect(() => {
-  //   props.updateCells();
-  // }, [props.addShop])
   return (
     <span
     // onMouseEnter={() => setStatus(true)} 
@@ -148,8 +145,6 @@ class App extends Component {
   }
 
   componentDidUpdate() {
-    console.log("update cells", this.state.cells);
-    console.log("update shops", this.state.shops);
   }
 
   createCells() {//parse cells
@@ -169,8 +164,8 @@ class App extends Component {
       let shortest = this.getShortest(i);
       if (shortest != undefined) {
         tmp[i][2] = shortest;
-        tmp[i][0] = this.getValuesShops(shortest[1][0]);
-        console.log("shortest of ", i, shortest);
+        let color = this.getValuesShops(shortest[1][0]);
+        tmp[i][0] = [color[0], color[1] - 30, color[2] + 30]
       }
     });
 
@@ -180,12 +175,14 @@ class App extends Component {
   addShop(i) {//add to shops list
     //shop->[i]:[color,underControl]
     let color = this.makeRandomColor();
-    this.setState({ shops: { ...this.state.shops, [i]: color } });
-    //chng isShop to true
-    let tmp = this.state.cells;
-    tmp[i][3] = true;
-    this.setState({ cells: tmp });
-    this.updateCells();
+    this.setState({ shops: { ...this.state.shops, [i]: color } }, () => {
+      //chng isShop to true
+      let tmp = this.state.cells;
+      tmp[i][3] = true;
+      this.setState({ cells: tmp }, () => {
+        this.updateCells()
+      });
+    });
   }
 
   checkInShops(i) {//check if exist in shops list
@@ -226,7 +223,7 @@ class App extends Component {
   //алг для hue, остальное в рандом
   //таблица с hue, но перемешанный
   makeRandomColor() {
-    return [this.randInt(360), 100, this.randInt(20) + 40];
+    return [this.randInt(60) * 6, 100, this.randInt(20) + 40];
   }
 
   shopCell(e, i) {//render shop cell or normal cell
@@ -268,7 +265,6 @@ class App extends Component {
   }
 
   render() {
-    console.log("rerender");
     return (
       <div>
         <Button onClick={() => this.addShop(1)}>add shop1</Button>
