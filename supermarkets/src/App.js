@@ -145,7 +145,7 @@ class App extends Component {
   }
 
   componentDidUpdate() {
-    this.updateCells();
+    this.updateCells();//вызов нужно переместить в другое место чтобы не было бесконечного вызова
     console.log(this.state);
   }
 
@@ -160,16 +160,18 @@ class App extends Component {
   }
 
   updateCells() {
+    let tmp = this.state.cells;
     Object.keys(this.state.cells).map((i) => {
-      this.getShortest(i);
+      tmp[i][2] = this.getShortest(i);
     });
+    this.setState({ cells: tmp });
   }
 
   addShop(i) {//add to shops list
     //shop->[i]:[color,underControl]
     let color = this.makeRandomColor();
     this.setState({ shops: { ...this.state.shops, [i]: color } });
-    //cng isShop
+    //chng isShop to true
     let tmp = this.state.cells;
     tmp[i][3] = true;
     this.setState({ cells: tmp });
@@ -231,24 +233,25 @@ class App extends Component {
 
 
   getShortest(i) {
-    if (this.state.shops != undefined && !this.state.cells[i][3]) {
+    if (Object.keys(this.state.shops).length !== 0 && !this.state.cells[i][3]) {
       let closest = [Infinity, -1];
-      this.state.shops.filter((e, ind) => {//нельзя сюда фильтр ставить
+      Object.keys(this.state.shops).map((ind) => {
         let dist = this.getDistance(i, ind);
-        if (dist < closest[0]) {
-          closest = [dist, ind];
-        } else if (dist == closest[0]) {
-          closest.push([dist, ind]);
+        if (dist[0] < closest[0]) {
+          closest = [dist[0], [ind]];
+        } else if (dist[0] == closest[0]) {
+          closest[1].push(ind);
         }
       });
-      console.log("closest", closest);
+
+      console.log("closest final_________________________", closest);
     }
   }
 
-  getDistance(i, y) {//distance between 2 cells
+  getDistance(i, ind) {//distance between 2 cells
     let coord1 = [Math.floor(i / 9), (i % 9)];
-    let coord2 = [Math.floor(y / 9), (y % 9)];
-    return [Math.abs(coord1[0] - coord2[0]) + Math.abs(coord1[1] - coord2[1]), i];
+    let coord2 = [Math.floor(ind / 9), (ind % 9)];
+    return [Math.abs(coord1[0] - coord2[0]) + Math.abs(coord1[1] - coord2[1]), ind];
   }
 
   render() {
