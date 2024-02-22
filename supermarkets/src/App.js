@@ -105,6 +105,9 @@ function Cell(props) {
   const handleClick = () => {
     setStatus(!status);
   }
+  // useEffect(() => {
+  //   props.updateCells();
+  // }, [props.addShop])
   return (
     <span
     // onMouseEnter={() => setStatus(true)} 
@@ -145,8 +148,8 @@ class App extends Component {
   }
 
   componentDidUpdate() {
-    this.updateCells();//вызов нужно переместить в другое место чтобы не было бесконечного вызова
-    console.log(this.state);
+    console.log("update cells", this.state.cells);
+    console.log("update shops", this.state.shops);
   }
 
   createCells() {//parse cells
@@ -161,9 +164,16 @@ class App extends Component {
 
   updateCells() {
     let tmp = this.state.cells;
+
     Object.keys(this.state.cells).map((i) => {
-      tmp[i][2] = this.getShortest(i);
+      let shortest = this.getShortest(i);
+      if (shortest != undefined) {
+        tmp[i][2] = shortest;
+        tmp[i][0] = this.getValuesShops(shortest[1][0]);
+        console.log("shortest of ", i, shortest);
+      }
     });
+
     this.setState({ cells: tmp });
   }
 
@@ -175,6 +185,7 @@ class App extends Component {
     let tmp = this.state.cells;
     tmp[i][3] = true;
     this.setState({ cells: tmp });
+    this.updateCells();
   }
 
   checkInShops(i) {//check if exist in shops list
@@ -222,11 +233,11 @@ class App extends Component {
     const isShop = this.checkInShops(i);
     if (isShop) {
       return (
-        <Cell addShop={(i) => this.addShop(i)} color={this.getValuesShops(i)} value={"shop"} i={i}></Cell>
+        <Cell addShop={(i) => this.addShop(i)} updateCells={() => this.updateCells()} color={this.getValuesShops(i)} value={"shop"} i={i}></Cell>
       )
     } else {
       return (
-        <Cell addShop={(i) => this.addShop(i)} color={this.getValuesCells(i)[0]} value={e} i={i}></Cell>
+        <Cell addShop={(i) => this.addShop(i)} updateCells={() => this.updateCells()} color={this.getValuesCells(i)[0]} value={e} i={i}></Cell>
       )
     }
   }
@@ -244,8 +255,10 @@ class App extends Component {
         }
       });
 
-      console.log("closest final_________________________", closest);
+      // console.log("closest final_________________________", closest);
+      return closest;
     }
+    return undefined;
   }
 
   getDistance(i, ind) {//distance between 2 cells
