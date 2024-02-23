@@ -4,117 +4,37 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import './App.css';
 // https://reactstrap.github.io/?path=/docs/components-popover--update
 
-// function Cell(props) {
-//   const [status, setStatus] = useState(false);
-//   // const [color, setColor] = useState("hsl(" + 0 + "," + 0 + "%," + 70 + "%" + ")");
-//   const [added, setAdded] = useState(false);
-//   const [distMap, setDistMap] = useState([]);
-//   const [textColor, setTextColor] = useState("white");
-//   const handleClick = () => {
-//     setStatus(!status);
-//   }
-//   const [h, s, l] = props.color ?? [0, 0, 0];
-//   const color = "hsl(" + h + "," + s + "%," + l + "%" + ")";
-//   // const printShop = () => {
-//   //   let current = props.shops.find((e) => e[0] == props.i);
-//   //   console.log("cur", current);
-//   //   if (current) {
-//   //     setColor("hsl(" + current[1][0] + "," + current[1][1] + "%," + current[1][2] + "%" + ")");
-//   //   }
-//   // }
-
-//   const printAll = () => {
-//     if (distMap.length != 0 && distMap[0].length != 0) {
-//       let minDist = Math.min(...distMap.map(e => { return e[0] }));
-//       let closest = distMap.filter(e => e[0] == minDist);//array of closest shop with distance and id
-//       let colors = [];
-//       closest.map((e) => {
-//         props.shops.filter(el => { if (el[0] == e[1]) { colors = el[1] } });//заменить на colors.push() для микса цветов
-//       });
-//       // if (closest[0][0] != 0) {
-//       // setColor("hsl(" + colors[0] + "," + parseInt(colors[1] - 30) + "%," + parseInt(colors[2] + 30) + "%" + ")");
-//       // }
-//       if ((colors[0] > 50 && colors[0] < 160) || (color[2] > 80)) {
-//         setTextColor("black");
-//       } else {
-//         setTextColor("white");
-//       }
-//       console.log("printAll");
-//       // console.log("colors:", colors);
-//       // console.log("all shops:", props.shops);
-//       // console.log("closest:", closest);
-//     }
-//   }
-
-//   const randInt = (multi) => {
-//     return Math.floor(Math.random() * multi);
-//   }
-
-//   //добавить шаг со смещением
-//   //таблица цветов
-//   //алг для hue, остальное в рандом
-//   //таблица с hue, но перемешанный
-//   const makeRandomColor = () => {
-//     return [randInt(360), 100, randInt(20) + 40];
-//   }
-
-//   const getDistance = (coord2, i) => {
-//     let coord1 = [Math.floor(props.i / 9), (props.i % 9)];
-//     return [Math.abs(coord1[0] - coord2[0]) + Math.abs(coord1[1] - coord2[1]), i];
-//   }
-
-//   // useEffect(() => {
-//   //   console.log("added");
-//   //   printShop();
-//   // }, [added, setAdded]);
-
-//   // useEffect(() => {
-//   //   props.shops.map((e) => {
-//   //     setDistMap([...distMap, getDistance([Math.floor(e[0] / 9), (e[0] % 9)], e[0])]);
-//   //   });
-//   // }, [props.addShop]);
-
-//   // useEffect(() => {
-//   //   printAll();
-//   // }, [distMap, setDistMap]);
-
-//   return (
-//     <span
-//     // onMouseEnter={() => setStatus(true)} 
-//     // onMouseLeave={() => setStatus(false)}
-//     >
-//       <Button id={"btn" + props.i} type="button" style={{ width: "60px", margin: "3px", background: color }} onClick={() => handleClick()}>
-//         <span style={{ mixBlendMode: "difference" }}>{/* реверс цвета */}
-//           {props.e}
-//         </span>
-//       </Button>
-//       <Popover isOpen={status} target={"btn" + props.i} trigger="legacy">
-//         <PopoverHeader>Quieres poner mercado aqui?</PopoverHeader>
-//         <PopoverBody>
-//           <div>Poblacion:{props.e}</div>
-//           <div>Index de zona:{props.e}</div>
-//           <Button onClick={() => { props.addShop(props.i, makeRandomColor()); setStatus(false); setAdded(true) }}>Si</Button>
-//         </PopoverBody>
-//       </Popover>
-//     </span>
-//   )
-// }
-
 function Cell(props) {
   const [status, setStatus] = useState(false);
+  const makeBackground = () => {
+    if (props.color[0] instanceof Array) {
+      let res = "linear-gradient(45deg,";
+      props.color.map((e) => {
+        res += "hsl(" + e[0][0] + "," + parseInt(e[0][1] - 30) + "%," + parseInt(e[0][2] + 20) + "%" + "),";
+      });
+      res = res.slice(0, res.length - 1);
+      res += ")";
+      return res;
+    } else {
+      return "hsl(" + props.color[0] + "," + props.color[1] + "%," + props.color[2] + "%" + ")";
+    }
+  };
+  //usememo чтобы не обновлять лишний раз
+
   const handleClick = () => {
     setStatus(!status);
   }
+
   return (
     <span
     // onMouseEnter={() => setStatus(true)} 
     // onMouseLeave={() => setStatus(false)}
     >
       <Button id={"btn" + props.i} type="button"
-        style={{ width: "60px", margin: "3px", background: "hsl(" + props.color[0] + "," + props.color[1] + "%," + props.color[2] + "%" + ")" }}
+        style={{ width: "60px", margin: "3px", background: makeBackground() }}
         onClick={() => handleClick()}
       >
-        <span style={{ mixBlendMode: "difference" }}>{/* реверс цвета */}
+        <span style={{ mixBlendMode: "difference" }}>{/* реверс цвета текста*/}
           {props.value}
         </span>
       </Button>
@@ -145,14 +65,15 @@ class App extends Component {
   }
 
   componentDidUpdate() {
+    // console.log(this.state.cells);
   }
 
   createCells() {//parse cells
     //cells->[i]:[color,value,closest,isShop]
-    // closest-> index,color,dist
+    //closest-> index,color,dist
     let cells;
     this.state.poblacion.map((e, i) => {
-      cells = { ...cells, [i]: [[0, 0, 70], e, [], false] }
+      cells = { ...cells, [i]: [[0, 0, 85], e, [], false] }
     });
     this.setState({ cells: { ...cells } });
   }
@@ -162,10 +83,18 @@ class App extends Component {
 
     Object.keys(this.state.cells).map((i) => {
       let shortest = this.getShortest(i);
+      let color = [];
       if (shortest != undefined) {
         tmp[i][2] = shortest;
-        let color = this.getValuesShops(shortest[1][0]);
-        tmp[i][0] = [color[0], color[1] - 30, color[2] + 30]
+        if (shortest[1].length > 1) {
+          shortest[1].map(e => {
+            color.push([this.getValuesShops(e)]);
+            tmp[i][0] = color;
+          });
+        } else {
+          color = this.getValuesShops(shortest[1][0]);
+          tmp[i][0] = [color[0], color[1] - 30, color[2] + 30]
+        }
       }
     });
 
@@ -179,6 +108,7 @@ class App extends Component {
       //chng isShop to true
       let tmp = this.state.cells;
       tmp[i][3] = true;
+      tmp[i][2] = [];
       this.setState({ cells: tmp }, () => {
         this.updateCells()
       });
@@ -193,15 +123,15 @@ class App extends Component {
     if (this.state.cells[i] != undefined) {
       return this.state.cells[i];
     }
-    return [[0, 0, 70], -1];
+    return [[0, 0, 85], -1];
   }
   getValuesShops(i) {
     if (this.state.shops[i] != undefined) {
       return this.state.shops[i];
     }
-    return [[0, 0, 70]];
+    return [[0, 0, 85]];
   }
-  mixColorsRGB(color1, color2, saturation = 0, brightness = 50) {
+  mixColorsHSL(color1, color2, saturation = 50, brightness = 60) {
     let h = parseInt(Math.floor((color1[0] + color2[0]) / 2));
     let s = parseInt(Math.floor((color1[1] + color2[1]) / 2));
     let l = parseInt(Math.floor((color1[2] + color2[2]) / 2));
@@ -211,7 +141,7 @@ class App extends Component {
     if (l > brightness) {
       l = brightness;
     }
-    return ("hsl(" + h + "," + s + "%," + l + "%" + ")");
+    return [h, s, l];
   }
 
   randInt(multi) {
@@ -223,7 +153,7 @@ class App extends Component {
   //алг для hue, остальное в рандом
   //таблица с hue, но перемешанный
   makeRandomColor() {
-    return [this.randInt(60) * 6, 100, this.randInt(20) + 40];
+    return [this.randInt(360), 100, this.randInt(20) + 40];
   }
 
   shopCell(e, i) {//render shop cell or normal cell
@@ -252,7 +182,6 @@ class App extends Component {
         }
       });
 
-      // console.log("closest final_________________________", closest);
       return closest;
     }
     return undefined;
@@ -267,10 +196,6 @@ class App extends Component {
   render() {
     return (
       <div>
-        <Button onClick={() => this.addShop(1)}>add shop1</Button>
-        <Button onClick={() => this.addShop(8)}>add shop8</Button>
-        {/* <Button onClick={() => console.log(this.checkInShops(5))}>show if in shops</Button> */}
-
         {
           Object.keys(this.state.cells).map((i) => (
             <>
