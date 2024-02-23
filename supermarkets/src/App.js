@@ -61,7 +61,8 @@ class App extends Component {
     };
   }
   componentDidMount() {
-    console.log(parseInt(1332 - 1288-36));
+    //то, что у нас делится между магазинами делится и в сумме
+    console.log(parseInt(1332 - 1288 - 144));
     this.createCells();
   }
 
@@ -120,6 +121,7 @@ class App extends Component {
       })
       // }
       //set initial population of the shop
+      console.log("ini", this.getPopulationCells(i));
       this.setPopulationShops(i, this.getPopulationCells(i))
       //chng isShop to true
       let tmp = this.state.cells;
