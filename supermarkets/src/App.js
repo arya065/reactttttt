@@ -1,8 +1,46 @@
 import React, { Component, useState, useEffect } from "react";
-import { List, Button, Progress, Popover, PopoverHeader, PopoverBody } from 'reactstrap';
+import { Button, Popover, PopoverHeader, PopoverBody } from 'reactstrap';
 import "bootstrap/dist/css/bootstrap.min.css";
 import './App.css';
 // https://reactstrap.github.io/?path=/docs/components-popover--update
+
+function ShopInfo(props) {
+  return (
+    <li>
+      index:{props.i}
+      <br />
+      pobalacion:{props.value[1]}
+    </li>
+  )
+}
+
+function ShopsInfo(props) {
+  const showShops = () => {
+    if (Object.keys(props.shops).length >= 1) {
+      return (
+        <div>
+          <p>Lista tiendas</p>
+          <ul>
+            {
+              Object.keys(props.shops).map((i) => (
+                <ShopInfo i={i} value={props.shops[i]} />
+              ))
+            }
+          </ul>
+        </div>
+      )
+    } else {
+      return (
+        <p>No hay tiendas</p>
+      )
+    }
+  }
+  return (
+    <div>
+      {showShops()}
+    </div>
+  )
+}
 
 function Cell(props) {
   const [status, setStatus] = useState(false);
@@ -30,11 +68,13 @@ function Cell(props) {
     // onMouseEnter={() => setStatus(true)} 
     // onMouseLeave={() => setStatus(false)}
     >
-      <Button id={"btn" + props.i} type="button"
+      <Button
+        id={"btn" + props.i}
+        type="button"
         style={{ width: "60px", margin: "3px", background: makeBackground() }}
         onClick={() => handleClick()}
       >
-        <span style={{ mixBlendMode: "difference" }}>{/* реверс цвета текста*/}
+        <span style={{ mixBlendMode: "difference" }}>{/* reverse of color of text*/}
           {props.value}
         </span>
       </Button>
@@ -43,7 +83,9 @@ function Cell(props) {
         <PopoverBody>
           <div>Poblacion:{props.value}</div>
           <div>Index de zona:{props.value}</div>
-          <Button onClick={() => { props.addShop(props.i); setStatus(false) }}>Si</Button>
+          <Button onClick={() => { props.addShop(props.i); setStatus(false) }}>
+            Si
+          </Button>
         </PopoverBody>
       </Popover>
     </span>
@@ -61,13 +103,11 @@ class App extends Component {
     };
   }
   componentDidMount() {
-    //то, что у нас делится между магазинами делится и в сумме
-    console.log(parseInt(1332 - 1288 - 144));
     this.createCells();
   }
 
   componentDidUpdate() {
-    console.log(this.state.shops);
+    // console.log(this.state.shops);
   }
 
   createCells() {//parse cells
@@ -85,24 +125,24 @@ class App extends Component {
 
     Object.keys(this.state.cells).map((i) => {
       let shortest = this.getShortest(i);
+      let population = this.getPopulationCells(i);
       let color = [];
       let shops = this.state.shops;
-
-      if (shortest != undefined) {
+      if (shortest != undefined) {//only for cells without shop
         tmp[i][2] = shortest;
-        if (shortest[1].length > 1) {
+        if (shortest[1].length > 1) {//for several closest
           shortest[1].map(e => {
-            console.log("lots of elem", e);
-            this.setPopulationShops(e, this.getPopulationCells(i));
+            this.setPopulationShops(e, population / shortest.length);//divide population between several shops
             color.push([this.getColorShops(e)]);
             tmp[i][0] = color;
           });
-        } else {
-          console.log("elem", shortest[1][0]);
-          this.setPopulationShops(shortest[1][0], this.getPopulationCells(i));
+        } else {//for one closest
+          this.setPopulationShops(shortest[1][0], population);
           color = this.getColorShops(shortest[1][0]);
           tmp[i][0] = [color[0], color[1] - 30, color[2] + 30]
         }
+      } else {//for shops only
+        this.setPopulationShops(i, population);
       }
     });
 
@@ -113,16 +153,10 @@ class App extends Component {
     //shop->[i]:[color,underControl]
     let color = this.makeRandomColor();
     this.setState({ shops: { ...this.state.shops, [i]: [color, 0] } }, () => {
-      //set to 0 population
-      // console.log(this.state.shops);
-      // if (Object.keys(this.state.shops).length != 0) {
+      //set to 0 population all shops
       Object.keys(this.state.shops).map((i) => {
         this.setPopulationShops(i)
       })
-      // }
-      //set initial population of the shop
-      console.log("ini", this.getPopulationCells(i));
-      this.setPopulationShops(i, this.getPopulationCells(i))
       //chng isShop to true
       let tmp = this.state.cells;
       tmp[i][3] = true;
@@ -157,12 +191,11 @@ class App extends Component {
   }
   setPopulationShops(i, value = -1) {
     if (this.state.shops[i] != undefined) {
+      let tmp = this.state.shops;
       if (value == -1) {
-        let tmp = this.state.shops;
         tmp[i][1] = 0;
         this.setState({ shops: tmp })
       } else {
-        let tmp = this.state.shops;
         tmp[i][1] += value;
         this.setState({ shops: tmp })
       }
@@ -196,15 +229,15 @@ class App extends Component {
 
   shopCell(e, i) {//render shop cell or normal cell
     const isShop = this.checkInShops(i);
+    let color;
     if (isShop) {
-      return (
-        <Cell addShop={(i) => this.addShop(i)} updateCells={() => this.updateCells()} color={this.getColorShops(i)} value={e} i={i}></Cell>
-      )
+      color = this.getColorShops(i);
     } else {
-      return (
-        <Cell addShop={(i) => this.addShop(i)} updateCells={() => this.updateCells()} color={this.getColorCells(i)[0]} value={e} i={i}></Cell>
-      )
+      color = this.getColorCells(i)[0];
     }
+    return (
+      <Cell addShop={(i) => this.addShop(i)} updateCells={() => this.updateCells()} color={color} value={e} i={i} />
+    )
   }
 
 
@@ -232,6 +265,7 @@ class App extends Component {
   }
 
   render() {
+    console.log("rerender");
     return (
       <div>
         {
@@ -242,6 +276,7 @@ class App extends Component {
             </>
           ))
         }
+        <ShopsInfo shops={this.state.shops} />
       </div>
     )
   }
