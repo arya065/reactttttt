@@ -2,19 +2,22 @@ import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import React, { Component, useState, useEffect } from "react";
 import { Button, Form, FormGroup, Label, Input, FormFeedback } from 'reactstrap';
+import { multiply, inv, transpose } from 'mathjs'
 import db from './db.json';
 
 function Result(props) {
   const calc = () => {
-    console.log(props.cnstAno);
-    let ano = props.cnstAno * (2024 - props.result[0].slice(0, 4));
-    let banos = props.cnstBanos * props.result[1];
-    let estado = props.cnstEstado * props.result[2];
-    let habitaciones = props.cnstHab * props.result[3];
-    let metros = props.cnstMetros * props.result[4];
+    let ano = props.formula[6] * (2024 - props.result[0].slice(0, 4));
+    let banos = props.formula[2] * props.result[1];
+    let estado = props.formula[7] * props.result[2];
+    let habitaciones = props.formula[1] * props.result[3];
+    let metros = props.formula[0] * props.result[4];
+    let vista = props.formula[3] * props.result[5];
+    let garaje = props.formula[4] * props.result[6];
+    let trastero = props.formula[5] * props.result[7];
+    let piscina = props.formula[8] * props.result[8];
 
-    let medium = (ano + banos + estado + habitaciones + metros) / 5;
-    console.log(Math.floor(medium));
+    let medium = ano + banos + estado + habitaciones + metros;
     return Math.floor(medium);
   }
 
@@ -35,11 +38,9 @@ function Result(props) {
 
 function App() {
   const [res, setRes] = useState([]);
-  const [ano, setAno] = useState(0);
-  const [banos, setBanos] = useState(0);
-  const [estado, setEstado] = useState(0);
-  const [hab, setHab] = useState(0);
-  const [metros, setMetros] = useState(0);
+  const [formula, setFormula] = useState();
+
+  const math = require('mathjs');
 
   useEffect(() => {
     const PRECIOS = [415000, 1850000, 335000, 675000, 370000, 680000, 299000, 2599000, 520000, 1980000, 147000, 219900, 136000, 138000, 400000, 244000, 335000, 735000, 180000, 380000, 260000, 700000, 299200, 149000, 370000, 320000, 950000, 380000, 367000, 430000, 293000, 545000, 641000, 477225, 95000, 1395000, 158000, 165000, 296900, 1990000, 222500, 448000, 680000, 2250000, 369000, 375000, 429000, 1690000, 159000, 222500, 850000, 2750000, 400000, 780000, 400000, 370000, 680000, 735000, 335000, 299000, 1375000]
@@ -50,22 +51,29 @@ function App() {
     let cnstHab = 0;
     let cnstMetros = 0;
     db.map((e, i) => {
-      e.precio = PRECIOS[i];
+      //   e.precio = PRECIOS[i];
       tmp.push(e)
     })
 
+    let X = [];
     tmp.map((e, i) => {
-      cnstAno += parseInt(e.ano);
-      cnstBanos += parseInt(e.precio / e.banos);
-      cnstEstado += parseInt(e.precio / e.estado);
-      cnstHab += parseInt(e.precio / e.habitaciones);
-      cnstMetros += parseInt(e.precio / e.metros);
+      X.push(Object.values(e));
     })
-    setAno(cnstAno / tmp.length);
-    setBanos(cnstBanos / tmp.length);
-    setEstado(cnstEstado / tmp.length);
-    setHab(cnstHab / tmp.length);
-    setMetros(cnstMetros / tmp.length);
+    let Xt = math.transpose(X);
+    setFormula(math.multiply(math.multiply(math.inv(math.multiply(Xt, X)), Xt), PRECIOS));
+
+    // tmp.map((e, i) => {
+    //   cnstAno += parseInt(e.ano);
+    //   cnstBanos += parseInt(e.precio / e.banos);
+    //   cnstEstado += parseInt(e.precio / e.estado);
+    //   cnstHab += parseInt(e.precio / e.habitaciones);
+    //   cnstMetros += parseInt(e.precio / e.metros);
+    // })
+    // setAno(cnstAno / tmp.length);
+    // setBanos(cnstBanos / tmp.length);
+    // setEstado(cnstEstado / tmp.length);
+    // setHab(cnstHab / tmp.length);
+    // setMetros(cnstMetros / tmp.length);
   }, [])
 
   const handleSubmit = (event) => {
@@ -87,7 +95,7 @@ function App() {
       })
       if (!err) {
         return (
-          <Result result={res} cnstAno={ano} cnstBanos={banos} cnstEstado={estado} cnstHab={hab} cnstMetros={metros} />
+          <Result result={res} formula={formula} />
         )
       }
     }
