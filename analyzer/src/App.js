@@ -51,7 +51,6 @@ function App() {
     let cnstHab = 0;
     let cnstMetros = 0;
     db.map((e, i) => {
-      //   e.precio = PRECIOS[i];
       tmp.push(e)
     })
 
@@ -61,19 +60,6 @@ function App() {
     })
     let Xt = math.transpose(X);
     setFormula(math.multiply(math.multiply(math.inv(math.multiply(Xt, X)), Xt), PRECIOS));
-
-    // tmp.map((e, i) => {
-    //   cnstAno += parseInt(e.ano);
-    //   cnstBanos += parseInt(e.precio / e.banos);
-    //   cnstEstado += parseInt(e.precio / e.estado);
-    //   cnstHab += parseInt(e.precio / e.habitaciones);
-    //   cnstMetros += parseInt(e.precio / e.metros);
-    // })
-    // setAno(cnstAno / tmp.length);
-    // setBanos(cnstBanos / tmp.length);
-    // setEstado(cnstEstado / tmp.length);
-    // setHab(cnstHab / tmp.length);
-    // setMetros(cnstMetros / tmp.length);
   }, [])
 
   const handleSubmit = (event) => {
